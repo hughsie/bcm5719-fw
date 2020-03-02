@@ -43,6 +43,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <types.h>
+#include <APE_NVIC.h>
+#include <printf.h>
 
 // Function pointer for vectors
 typedef void (*vector_t)(void) __attribute__((interrupt));
@@ -52,47 +54,72 @@ typedef struct
 {
     uint32_t *sp;
     vector_t *__start;
-    vector_t *vectors[46];
+    vector_t vectors[46];
 } vector_table_t;
 
 extern uint32_t _estack;
 
 extern vector_t __start;
 
-#pragma weak Vector_NMI
-#pragma weak Vector_HardFault
-#pragma weak Vector_MemoryManagmentFault
-#pragma weak Vector_BusFault
-#pragma weak Vector_UsageFault
-#pragma weak Vector_SVCall
-#pragma weak Vector_Debug
-#pragma weak Vector_PendSV
-#pragma weak Vector_Systick
+void __attribute__((interrupt)) Vector_Default(void)
+{
+    uint32_t vector = NVIC.InterruptControlState.bits.VECTACTIVE;
+    printf("ISR: %d\n", vector);
+}
 
-extern vector_t Vector_NMI;
-extern vector_t Vector_HardFault;
-extern vector_t Vector_MemoryManagmentFault;
-extern vector_t Vector_BusFault;
-extern vector_t Vector_UsageFault;
-extern vector_t Vector_SVCall;
-extern vector_t Vector_Debug;
-extern vector_t Vector_PendSV;
-extern vector_t Vector_Systick;
+void __attribute__((interrupt)) Vector_NMI(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_HardFault(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_MemoryManagmentFault(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_BusFault(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_UsageFault(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_SVCall(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_Debug(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_PendSV(void) __attribute__((weak, alias("Vector_Default")));
+void __attribute__((interrupt)) Vector_Systick(void) __attribute__((weak, alias("Vector_Default")));
 
 vector_table_t gVectors __attribute__((section(".init"))) = {
     .sp = &_estack,
     .__start = &__start,
     .vectors = {
-        [0] = &Vector_NMI,
-        [1] = &Vector_HardFault,
-        [2] = &Vector_MemoryManagmentFault,
-        [3] = &Vector_BusFault,
-        [4] = &Vector_UsageFault,
+        [0x0] = Vector_NMI,
+        [0x1] = Vector_HardFault,
+        [0x2] = Vector_MemoryManagmentFault,
+        [0x3] = Vector_BusFault,
+        [0x4] = Vector_UsageFault,
+        /* 0x5: Reserved */
+        /* 0x7: Reserved */
+        /* 0x8: Reserved */
+        /* 0x9: Reserved */
+        [0x9] = Vector_SVCall,
+        [0xA] = Vector_Debug,
+        /* 0xB: Reserved */
+        [0xC] = Vector_PendSV,
+        [0xD] = Vector_Systick,
+        /* 0xE: Reserved */
+        /* 0xF: Reserved */
 
-        [9] = &Vector_SVCall,
-        [10] = &Vector_Debug,
-
-        [12] = &Vector_PendSV,
-        [13] = &Vector_Systick,
+        /* External Interrupts */
+        [0x10] = Vector_Default,    /* Handle Event */
+        /* 0x11: Reserved */
+        [0x16] = Vector_Default,    /* Host to BMC */
+        /* 0x17: Reserved */
+        [0x18] = Vector_Default,    /* TX Error */
+        [0x19] = Vector_Default,    /* RX Packet - Even ports */
+        /* 0x1A: Reserved */
+        /* 0x1B: Reserved */
+        [0x1C] = Vector_Default,    /* SMBUS 0 */
+        /* 0x1D: Reserved */
+        [0x1E] = Vector_Default,    /* SMBUS 1 */
+        [0x1F] = Vector_Default,    /* RMU Egress */
+        /* 0x20: Reserved */
+        /* 0x21: Reserved */
+        [0x22] = Vector_Default,    /* Gen Status Changed */
+        [0x23] = Vector_Default,    /* seems to be always pending, but always masked. no handler (i.e., uses exception handler) */
+        /* 0x24: Reserved */
+        /* 0x25: Reserved */
+        [0x26] = Vector_Default,    /* Voltage Source Changed */
+        [0x27] = Vector_Default,    /* Link Status Changed (Even Ports) */
+        [0x28] = Vector_Default,    /* Link Status Changed (Odd Ports) */
+        [0x29] = Vector_Default,    /* RX Packet (Odd ports) */
     },
 };
