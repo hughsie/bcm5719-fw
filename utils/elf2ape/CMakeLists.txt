@@ -44,7 +44,7 @@
 
 project(elf2ape)
 
-add_definitions(-Wall -Werror)
+add_definitions(-Wall)
 set(SOURCES
     main.cpp
 )

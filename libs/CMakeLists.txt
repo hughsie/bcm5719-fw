@@ -44,18 +44,18 @@
 
 
 add_subdirectory(NVRam)
-add_subdirectory(APE)
-add_subdirectory(MII)
+#add_subdirectory(APE)
+#add_subdirectory(MII)
 add_subdirectory(VPD)
 
-add_subdirectory(NCSI)
-add_subdirectory(Network)
+#add_subdirectory(NCSI)
+#add_subdirectory(Network)
 
 add_subdirectory(OptParse)
 
-add_subdirectory(bcm5719)
+#add_subdirectory(bcm5719)
 
-add_subdirectory(printf)
+#add_subdirectory(printf)
 
 add_subdirectory(Compress)
-add_subdirectory(elfio)
+#add_subdirectory(elfio)

@@ -45,27 +45,24 @@
 enable_testing()
 include(GoogleTest)
 
-SET(COMPILER_BASE       $ENV{HOME}/llvm-bcm5719)
-SET(CMAKE_C_COMPILER    ${COMPILER_BASE}/bin/clang)
-SET(CMAKE_CXX_COMPILER  ${COMPILER_BASE}/bin/clang++)
-SET(CMAKE_ASM_COMPILER  ${COMPILER_BASE}/bin/clang)
-
 include(cmake/version.cmake)
 
 cmake_minimum_required(VERSION 3.5.1)
 project(bcm5719-fw VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
+
+add_definitions(-D__LITTLE_ENDIAN__)
 include(cmake/clang-format.cmake)
 include(cmake/clang-analyzer.cmake)
 include(cmake/config.cmake)
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 add_subdirectory(libs)
 add_subdirectory(utils)
 
 
 add_subdirectory(simulator)
-add_subdirectory(stage1)
+#add_subdirectory(stage1)
 
-add_subdirectory(ape)
+#add_subdirectory(ape)

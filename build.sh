@@ -102,14 +102,3 @@ cd "$BUILD_DIR"
 # Do the build
 "$CMAKE" .. $GENERATOR $ARGS
 "$CMAKE" --build .
-
-# Ensure formatting is correct
-"$CMAKE" --build . --target check-format
-
-# Run the tests
-"$CMAKE" --build . --target test
-
-# Generate release packages.
-"$CMAKE" --build . --target package
-# Work around an issue with --target package_source that fails due to ('s in the path
-"$CPACK" --config ./CPackSourceConfig.cmake

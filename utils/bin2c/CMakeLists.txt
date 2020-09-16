@@ -44,7 +44,7 @@
 
 project(bin2c)
 
-add_definitions(-Wall -Werror)
+add_definitions(-Wall)
 set(SOURCES
     main.cpp
 )

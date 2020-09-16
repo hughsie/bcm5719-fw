@@ -42,12 +42,12 @@
 ### @endcond
 ################################################################################
 
-add_subdirectory(bcmregtool)
+#add_subdirectory(bcmregtool)
 add_subdirectory(bcmflash)
 
-add_subdirectory(apeconsole)
+#add_subdirectory(apeconsole)
 
-add_subdirectory(ape2elf)
-add_subdirectory(elf2ape)
+#add_subdirectory(ape2elf)
+#add_subdirectory(elf2ape)
 
-add_subdirectory(bin2c)
+#add_subdirectory(bin2c)
